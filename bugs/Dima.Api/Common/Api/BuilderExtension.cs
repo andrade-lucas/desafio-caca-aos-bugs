@@ -62,7 +62,9 @@ public static class BuilderExtension
                 policy => policy
                     .WithOrigins([
                         Configuration.BackendUrl,
-                        Configuration.FrontendUrl
+                        Configuration.FrontendUrl,
+                        "https://localhost:7288",
+                        "https://localhost:7298"
                     ])
                     .AllowAnyMethod()
                     .AllowAnyHeader()
