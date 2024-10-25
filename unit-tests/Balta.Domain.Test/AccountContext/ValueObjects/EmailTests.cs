@@ -122,7 +122,7 @@ public class EmailTests
         #region Act
 
         Email email = Email.ShouldCreate(validEmail, dateTimeProvider.Object);
-        email.ShouldVerify(email.VerificationCode);
+        email.ShouldVerify(email.VerificationCode, dateTimeProvider.Object);
 
         #endregion
 
