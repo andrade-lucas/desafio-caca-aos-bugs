@@ -63,7 +63,8 @@ public partial record Email : ValueObject
 
     #region Methods
 
-    public void ShouldVerify(string verificationCode) => VerificationCode.ShouldVerify(verificationCode);
+    public void ShouldVerify(string verificationCode, IDateTimeProvider dateTimeProvider) 
+        => VerificationCode.ShouldVerify(verificationCode, dateTimeProvider);
 
     #endregion
 
