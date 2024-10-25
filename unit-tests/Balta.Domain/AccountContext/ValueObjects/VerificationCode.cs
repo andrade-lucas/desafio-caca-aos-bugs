@@ -10,13 +10,18 @@ public class VerificationCode
     private const int MinLength = 6;
 
     #endregion
-    
+
     #region Constructors
+
+    public VerificationCode(string code)
+    {
+        Code = code;
+    }
 
     private VerificationCode(string code, DateTime expiresAtUtc)
     {
-        Code = Guid.NewGuid().ToString("N")[..MinLength].ToUpper();
-        ExpiresAtUtc = DateTime.UtcNow.AddMinutes(5);
+        Code = code;
+        ExpiresAtUtc = expiresAtUtc;
     }
 
     #endregion
@@ -41,7 +46,7 @@ public class VerificationCode
 
     #region Methods
 
-    public void ShouldVerify(string code)
+    public void ShouldVerify(string code, IDateTimeProvider dateTimeProvider)
     {
         if (string.IsNullOrEmpty(code))
             throw new InvalidVerificationCodeException();
@@ -51,10 +56,16 @@ public class VerificationCode
         
         if(code.Length != MinLength)
             throw new InvalidVerificationCodeException();
-        
-        if(IsActive == false)
+
+        if (Code != code)
             throw new InvalidVerificationCodeException();
-        
+
+        if (VerifiedAtUtc != null)
+            throw new InvalidVerificationCodeException("O código informado já foi verificado");
+
+        if (ExpiresAtUtc < dateTimeProvider.UtcNow)
+            throw new InvalidVerificationCodeException("Código expirado");
+
         VerifiedAtUtc = DateTime.UtcNow;
         ExpiresAtUtc = null;
     }
@@ -64,6 +75,8 @@ public class VerificationCode
     #region Operators
     
     public static implicit operator string(VerificationCode verificationCode) => verificationCode.ToString();
+
+    public static implicit operator VerificationCode(string code) => new VerificationCode(code);
     
     #endregion
 
