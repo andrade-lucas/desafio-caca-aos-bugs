@@ -27,6 +27,17 @@ public partial record Email : ValueObject
 
     #region Factories
 
+    public static Email ShouldCreate(string address)
+    {
+        address = address.Trim();
+        address = address.ToLower();
+
+        if (!EmailRegex().IsMatch(address))
+            throw new InvalidEmailException();
+
+        return new Email(address, address.ToBase64(), null);
+    }
+
     public static Email ShouldCreate(string address, IDateTimeProvider dateTimeProvider)
     {
         address = address.Trim();
@@ -60,6 +71,9 @@ public partial record Email : ValueObject
 
     public static implicit operator string(Email email)
         => email.ToString();
+
+    public static explicit operator Email(string address)
+        => Email.ShouldCreate(address);
 
     #endregion
 
