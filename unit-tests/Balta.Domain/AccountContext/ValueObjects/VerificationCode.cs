@@ -61,10 +61,10 @@ public class VerificationCode
             throw new InvalidVerificationCodeException();
 
         if (VerifiedAtUtc != null)
-            throw new InvalidVerificationCodeException("O código informado já foi verificado");
+            throw new InvalidVerificationCodeException("This code is already verified");
 
         if (ExpiresAtUtc < dateTimeProvider.UtcNow)
-            throw new InvalidVerificationCodeException("Código expirado");
+            throw new InvalidVerificationCodeException("This code is expiried");
 
         VerifiedAtUtc = DateTime.UtcNow;
         ExpiresAtUtc = null;
