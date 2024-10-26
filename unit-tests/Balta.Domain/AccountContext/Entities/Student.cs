@@ -46,7 +46,7 @@ public sealed class Student : Entity, IAggregateRoot
 
         var name = Name.ShouldCreate(firstName, lastName);
         var email = Email.ShouldCreate(emailAddress, dateTimeProvider);
-        var password = Password.ShouldCreate(plainTextPassword);
+        var password = Password.ShouldCreate(plainTextPassword, dateTimeProvider);
         var user = User.ShouldCreate(email, password);
         var tracker = Tracker.ShouldCreate(dateTimeProvider);
         var student = new Student(Guid.NewGuid(), name, email, user, tracker);

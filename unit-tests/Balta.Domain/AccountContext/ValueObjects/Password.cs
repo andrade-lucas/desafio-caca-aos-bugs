@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using Balta.Domain.AccountContext.ValueObjects.Exceptions;
+using Balta.Domain.SharedContext.Abstractions;
 using Balta.Domain.SharedContext.ValueObjects;
 
 namespace Balta.Domain.AccountContext.ValueObjects;
@@ -8,6 +9,7 @@ public record Password : ValueObject
 {
     #region Constants
 
+    private const int TimeToLiveInMinutes = 60;
     private const int MinLength = 8;
     private const int MaxLength = 48;
     private const string Valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -17,18 +19,17 @@ public record Password : ValueObject
 
     #region Constructors
 
-    private Password(string hash)
+    private Password(string hash, IDateTimeProvider dateTimeProvider)
     {
         Hash = hash;
-        ExpiresAtUtc = null;
-        MustChange = false;
+        ExpiresAtUtc = dateTimeProvider.UtcNow.AddMinutes(TimeToLiveInMinutes);
     }
 
     #endregion
 
     #region Factories
 
-    public static Password ShouldCreate(string plainText)
+    public static Password ShouldCreate(string plainText, IDateTimeProvider dateTimeProvider)
     {
         if (string.IsNullOrEmpty(plainText))
             throw new InvalidPasswordException("Password cannot be null or empty");
@@ -44,7 +45,7 @@ public record Password : ValueObject
 
         var hash = ShouldHashPassword(plainText);
         
-        return new Password(hash);
+        return new Password(hash, dateTimeProvider);
     }
 
     #endregion
@@ -53,11 +54,21 @@ public record Password : ValueObject
 
     public string Hash { get; }
     public DateTime? ExpiresAtUtc { get; }
-    public bool MustChange { get; }
+    public bool MustChange => ExpiresAtUtc != null && ExpiresAtUtc < DateTime.UtcNow;
+    public bool IsExpiried => ExpiresAtUtc != null && ExpiresAtUtc < DateTime.UtcNow;
 
     #endregion
 
     #region Public Methods
+
+    public void ShouldVerify(IDateTimeProvider dateTimeProvider)
+    {
+        if (IsExpiried)
+            throw new InvalidPasswordException("Password is expiried");
+
+        if (MustChange == true)
+            throw new InvalidPasswordException("You must change your password");
+    }
 
     public static string ShouldGenerate(
         short length = 16,

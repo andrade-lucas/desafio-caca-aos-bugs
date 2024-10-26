@@ -23,7 +23,7 @@ public sealed class User : Entity, IAggregate
     public static User ShouldCreate(string emailAddress, string plainTextPassword, IDateTimeProvider dateTimeProvider)
     {
         var email = Email.ShouldCreate(emailAddress, dateTimeProvider);
-        var password = Password.ShouldCreate(plainTextPassword);
+        var password = Password.ShouldCreate(plainTextPassword, dateTimeProvider);
         
         return new User(Guid.NewGuid(), email, password);
     }
