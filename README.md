@@ -8,8 +8,10 @@ Depuração e solução de bugs, pensamento crítico e analítico, segurança e 
 
 ## Participantes
 ### 🚀 Líder Técnico
-[Lucas Andrade e Silva](https://github.com/andrade-lucas) 
-* [![Linkedin](https://i.sstatic.net/gVE0j.png) LinkedIn](https://www.linkedin.com/in/lucas-andrade-e-silva/)
+Lucas Andrade e Silva
+
+[![LinkedIn](https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/lucas-andrade-e-silva/)
+[![LinkedIn](https://img.shields.io/badge/-GitHub-%23010409?style=for-the-badge&logo=github&logoColor=white)](https://github.com/andrade-lucas)
 
 ### 👻 Caçadores de Bugs
 * [Lucas Andrade e Silva](https://github.com/andrade-lucas)
