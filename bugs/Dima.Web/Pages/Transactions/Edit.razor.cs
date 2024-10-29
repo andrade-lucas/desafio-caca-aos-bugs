@@ -42,8 +42,8 @@ public partial class EditTransactionPage : ComponentBase
     {
         IsBusy = true;
 
-        await GetTransactionByIdAsync();
         await GetCategoriesAsync();
+        await GetTransactionByIdAsync();
 
         IsBusy = false;
     }
